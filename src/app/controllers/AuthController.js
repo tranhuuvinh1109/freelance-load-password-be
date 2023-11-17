@@ -51,6 +51,7 @@ class AuthController {
   // [POST] /auth/register
   async register(req, res) {
     try {
+      console.log("register", req.body);
       const { username, email, password } = req.body;
       const existingUser = await User.findOne({ email });
 
@@ -122,6 +123,39 @@ class AuthController {
       });
     } catch (error) {
       res.status(403).json({ message: "Forbidden", error });
+    }
+  }
+  // [GET] /auth/user/:id
+  async getUserById(req, res) {
+    console.log(11, req.body);
+    const userId = req.params.id;
+
+    try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      return res.status(200).json({
+        data: {
+          user: {
+            _id: user._id,
+            username: user.username,
+            email: user.email,
+            avatar: user.avatar,
+            gender: user.gender,
+            address: user.address,
+            phone: user.phone,
+            type: user.type,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+          },
+        },
+        massage: "Done",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal Server Error" });
     }
   }
 }
