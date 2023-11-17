@@ -6,5 +6,6 @@ router.post("/login", AuthController.login);
 router.post("/register", AuthController.register);
 router.post("/me", AuthController.me);
 router.get("/user/:id", AuthController.getUserById);
+router.get("/user/all", AuthController.getAllUser);
 
 module.exports = router;

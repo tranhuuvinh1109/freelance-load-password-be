@@ -127,7 +127,27 @@ class AuthController {
   }
   // [GET] /auth/user/:id
   async getUserById(req, res) {
-    console.log(11, req.body);
+    const userId = req.params.id;
+
+    try {
+      const users = await User.find({ type: { $ne: 1 } }, "-password");
+
+      if (!users) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      return res.status(200).json({
+        data: {
+          users: users,
+        },
+        massage: "Done",
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+  // [GET] /auth/user/all
+  async getAllUser(req, res) {
     const userId = req.params.id;
 
     try {
